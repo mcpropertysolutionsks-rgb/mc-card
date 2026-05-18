@@ -1,0 +1,1 @@
+Put your business card image in this folder and rename it to card.png

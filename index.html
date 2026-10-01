@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="assets/app-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Allura&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
 
 <style>
   :root{
@@ -300,24 +300,11 @@
   .template-tax{top:81.55%}
   .template-grand{top:85.05%;font-size:15px;color:#111}
 
-  .template-signature-block{
-    position:absolute;left:11.8%;top:77.75%;width:42%;color:#0c2744;
-  }
   .template-signature{
-    font-family:"Alex Brush","Allura","Segoe Script","Brush Script MT",cursive;
-    font-size:43px;line-height:.92;color:#0c2744;transform:rotate(-2deg);
-    white-space:nowrap;text-shadow:0 .4px .5px rgba(12,39,68,.24);
-  }
-  .template-signature-line{
-    width:2.42in;height:1.5px;background:#c98a18;margin:-1px 0 3px 7px;opacity:.95;
-  }
-  .template-signature-name{
-    margin-left:8px;font-family:Arial,Helvetica,sans-serif;font-size:10.5px;font-weight:800;
-    letter-spacing:.04em;color:#111;text-transform:uppercase;
-  }
-  .template-signature-thanks{
-    margin:2px 0 0 8px;font-family:Georgia,"Times New Roman",serif;font-size:10.5px;
-    font-style:italic;color:#7a5200;
+    position:absolute;left:13.0%;top:80.15%;width:39%;
+    font-family:"Allura","Segoe Script","Brush Script MT",cursive;
+    font-size:36px;line-height:1;color:#111;transform:rotate(-2deg);
+    white-space:nowrap;
   }
 
   .continuation-content{position:absolute;left:5.3%;right:5.3%;top:18.0%;bottom:10.5%;z-index:1}
@@ -332,19 +319,10 @@
   .cont-table .num{text-align:right;white-space:nowrap}
   .cont-table .qty{text-align:center}
   .cont-table .desc small{display:block;color:#333;margin-top:2px}
-  .cont-signature-block{position:absolute;left:8%;bottom:6.8%;color:#0c2744}
   .cont-signature{
-    font-family:"Alex Brush","Allura","Segoe Script","Brush Script MT",cursive;
-    font-size:38px;line-height:.92;transform:rotate(-2deg);text-shadow:0 .4px .5px rgba(12,39,68,.24)
-  }
-  .cont-signature-line{width:2.15in;height:1.5px;background:#c98a18;margin:-1px 0 3px 6px}
-  .cont-signature-name{
-    margin-left:7px;font-family:Arial,Helvetica,sans-serif;font-size:10px;font-weight:800;
-    letter-spacing:.04em;color:#111;text-transform:uppercase
-  }
-  .cont-signature-thanks{
-    margin:2px 0 0 7px;font-family:Georgia,"Times New Roman",serif;font-size:10px;
-    font-style:italic;color:#7a5200
+    position:absolute;left:8%;bottom:8.5%;
+    font-family:"Allura","Segoe Script","Brush Script MT",cursive;
+    font-size:31px;color:#111;transform:rotate(-2deg)
   }
 
   .photo-content{position:absolute;left:5.2%;right:5.2%;top:18%;bottom:11%;z-index:1}
@@ -704,12 +682,7 @@ function renderPreview(){
             <thead><tr><th>Description</th><th>Units</th><th>Cost</th><th>Quantity</th><th>Amount</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
-          <div class="cont-signature-block">
-            <div class="cont-signature">Miguel Castro</div>
-            <div class="cont-signature-line"></div>
-            <div class="cont-signature-name">Miguel A. Castro | Manager</div>
-            <div class="cont-signature-thanks">Thank you for your business.</div>
-          </div>
+          <div class="cont-signature">Miguel A. Castro</div>
         </div>
       </section>`;
   }
@@ -757,12 +730,7 @@ function renderPreview(){
         <div class="template-total template-tax">${inv.taxRate?money(taxFor(inv)):"—"}</div>
         <div class="template-total template-grand">${money(totalFor(inv))}</div>
 
-        <div class="template-signature-block">
-          <div class="template-signature">Miguel Castro</div>
-          <div class="template-signature-line"></div>
-          <div class="template-signature-name">Miguel A. Castro | Manager</div>
-          <div class="template-signature-thanks">Thank you for your business.</div>
-        </div>
+        <div class="template-signature">Miguel A. Castro</div>
       </div>
     </section>
     ${continuationPages}

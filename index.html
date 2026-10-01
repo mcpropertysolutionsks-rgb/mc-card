@@ -83,6 +83,33 @@
   .photo-edit img{width:100%;height:140px;object-fit:cover;border-radius:6px}
   .photo-edit input{width:100%;margin-top:6px;padding:7px;border:1px solid #bbb;border-radius:6px}
   .help{font-size:12px;color:#666;margin-top:7px}
+  .inline-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0 12px}
+  .inline-actions .field{flex:1;min-width:230px}
+  .mini-btn{border:1px solid #ccc;border-radius:7px;background:#fff;padding:8px 10px;font-weight:700}
+  .contact-grid{display:grid;grid-template-columns:320px minmax(0,1fr);gap:16px}
+  .contact-list{display:flex;flex-direction:column;gap:8px;max-height:620px;overflow:auto}
+  .contact-card{border:1px solid #d4d4d4;border-radius:8px;padding:10px;background:#fafafa;cursor:pointer}
+  .contact-card.active{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;background:#fff8e8}
+  .contact-card .name{font-weight:800}
+  .contact-card .meta{font-size:12px;color:#555;margin-top:3px}
+  .workorder-page{
+    width:8.5in;min-height:11in;background:#fff;margin:0 auto 18px;padding:.45in;
+    box-shadow:0 3px 14px rgba(0,0,0,.18);font-family:Arial,Helvetica,sans-serif;color:#111
+  }
+  .wo-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;border-bottom:3px solid var(--gold);padding-bottom:12px;margin-bottom:18px}
+  .wo-brand{font-family:Georgia,"Times New Roman",serif;font-size:23px;font-weight:800;letter-spacing:.04em}
+  .wo-title{text-align:right;font-family:Georgia,"Times New Roman",serif;font-size:26px;font-weight:800}
+  .wo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+  .wo-box{border:1px solid #cfcfcf;padding:10px;min-height:.58in}
+  .wo-box b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#555;margin-bottom:5px}
+  .wo-section{margin-top:14px}
+  .wo-section h3{font-family:Georgia,"Times New Roman",serif;margin:0 0 6px;border-bottom:1.5px solid var(--gold);padding-bottom:5px;font-size:18px}
+  .wo-lines{white-space:pre-line;line-height:1.35;min-height:.55in}
+  .checklist{display:grid;grid-template-columns:1fr 1fr;gap:7px 18px;margin-top:8px}
+  .checkitem{font-size:13px}
+  .checkitem::before{content:"☐ ";font-weight:800}
+  .wo-sign{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:34px}
+  .wo-line{border-top:1.5px solid #111;padding-top:6px;font-size:12px}
 
   .preview-wrap{display:none;overflow:auto;padding:12px 0}
   .preview-wrap.active{display:block}
@@ -174,7 +201,7 @@
   @media(max-width:980px){
     .app{grid-template-columns:1fr}
     .sidebar{position:relative;height:auto}
-    .grid2,.grid3{grid-template-columns:1fr}
+    .grid2,.grid3,.contact-grid,.wo-grid,.wo-sign{grid-template-columns:1fr}
     .workspace{padding:10px}
     .invoice-page,.photo-page{transform-origin:top left}
   }
@@ -182,7 +209,7 @@
   @media print{
     *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
     html,body{background:#fff!important;margin:0!important;padding:0!important}
-    .sidebar,.toolbar,.editor,.attachment-note{display:none!important}
+    .sidebar,.toolbar,.editor,.attachment-note,.workorder-tools{display:none!important}
     .main,.workspace,.preview-wrap,#invoicePreview{
       display:block!important;
       padding:0!important;
@@ -338,11 +365,14 @@
 
   .attachment-note{display:block}
   @media print{
-    .sidebar,.toolbar,.editor,.attachment-note{display:none!important}
+    .sidebar,.toolbar,.editor,.attachment-note,.workorder-tools{display:none!important}
     .invoice-page,.continuation-page,.photo-page{
       box-shadow:none!important;margin:0!important;width:8.5in!important;height:11in!important;min-height:11in!important;
       page-break-after:always!important;break-after:page!important;overflow:hidden!important
     }
+    body.print-workorder #invoicePreview{display:none!important}
+    body.print-workorder #workOrderPanel{display:block!important;box-shadow:none!important;border:0!important;padding:0!important}
+    body.print-workorder .workorder-page{box-shadow:none!important;margin:0!important;width:8.5in!important;min-height:11in!important}
     #invoicePreview>section:last-child{page-break-after:auto!important;break-after:auto!important}
     @page{size:Letter;margin:0}
   }
@@ -367,6 +397,8 @@
     <div class="toolbar">
       <div class="tabs">
         <button class="tab active" id="editTab">Edit</button>
+        <button class="tab" id="contactsTab">Contacts</button>
+        <button class="tab" id="workOrderTab">Work Order</button>
         <button class="tab" id="previewTab">Preview</button>
       </div>
       <div class="spacer"></div>
@@ -381,6 +413,11 @@
         <div class="grid2">
           <div>
             <div class="section-title">Bill To</div>
+            <div class="inline-actions">
+              <div class="field"><label>Saved Contact / Property</label><select id="contactSelect"><option value="">Select saved contact...</option></select></div>
+              <button class="mini-btn" id="applyContactBtn" type="button">Apply</button>
+              <button class="mini-btn" id="saveContactFromInvoiceBtn" type="button">Save Contact</button>
+            </div>
             <div class="field"><label>Manager</label><input id="manager"></div>
             <div class="field"><label>Property</label><input id="property"></div>
             <div class="field"><label>Address</label><textarea id="address"></textarea></div>
@@ -434,6 +471,57 @@
         <div class="help">The printed master artwork is fixed to the supplied invoice template.</div>
       </section>
 
+      <section class="editor hidden" id="contactsPanel">
+        <div class="section-title">Contacts / Properties</div>
+        <div class="contact-grid">
+          <div>
+            <div class="inline-actions">
+              <button class="mini-btn" id="newContactBtn" type="button">+ New Contact</button>
+            </div>
+            <div id="contactList" class="contact-list"></div>
+          </div>
+          <div>
+            <div class="grid2">
+              <div class="field"><label>Property</label><input id="contactProperty"></div>
+              <div class="field"><label>Manager</label><input id="contactManager"></div>
+              <div class="field"><label>Phone</label><input id="contactPhone"></div>
+              <div class="field"><label>Email</label><input id="contactEmail"></div>
+            </div>
+            <div class="field"><label>Address</label><textarea id="contactAddress"></textarea></div>
+            <div class="grid2">
+              <div class="field"><label>Default Terms</label><input id="contactTerms" placeholder="Net 30"></div>
+              <div class="field"><label>Work Order Prefix</label><input id="contactWorkOrderPrefix" placeholder="AC"></div>
+            </div>
+            <div class="field"><label>Notes</label><textarea id="contactNotes" placeholder="Billing notes, office info, preferred contact, etc."></textarea></div>
+            <div class="inline-actions">
+              <button class="mini-btn" id="saveContactBtn" type="button">Save Contact</button>
+              <button class="mini-btn" id="useContactBtn" type="button">Use on Current Invoice</button>
+              <button class="mini-btn" id="deleteContactBtn" type="button">Delete Contact</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="editor hidden" id="workOrderPanel">
+        <div class="workorder-tools inline-actions">
+          <button class="mini-btn" id="printWorkOrderBtn" type="button">Print Work Order</button>
+          <span class="help">This is separate from the invoice. It keeps job notes, checklist, and proof of work clean.</span>
+        </div>
+        <div class="section-title">Work Order Sheet</div>
+        <div class="grid3">
+          <div class="field"><label>Assigned To</label><input id="assignedTo"></div>
+          <div class="field"><label>Scheduled Date</label><input type="date" id="scheduledDate"></div>
+          <div class="field"><label>Job Status</label><select id="jobStatus"><option>Scheduled</option><option>In Progress</option><option>Completed</option><option>Needs Approval</option></select></div>
+          <div class="field"><label>Start Time</label><input id="startTime" placeholder="9:00 AM"></div>
+          <div class="field"><label>End Time</label><input id="endTime" placeholder="1:00 PM"></div>
+          <div class="field"><label>Access / Key Notes</label><input id="accessNotes"></div>
+        </div>
+        <div class="field"><label>Job Instructions</label><textarea id="jobInstructions" placeholder="What needs to be done on site"></textarea></div>
+        <div class="field"><label>Materials / Supplies</label><textarea id="materials" placeholder="Paint, tools, supplies, special materials"></textarea></div>
+        <div class="field"><label>Completion Notes</label><textarea id="completionNotes" placeholder="What was completed, issues found, manager notes"></textarea></div>
+        <div id="workOrderPreview"></div>
+      </section>
+
       <section class="preview-wrap" id="previewWrap">
         <div id="invoicePreview"></div>
       </section>
@@ -448,7 +536,7 @@ const STORAGE_KEY = "mcps_invoice_system_v1";
 const COUNTER_KEY = "mcps_invoice_counter_v1";
 const PHOTO_DB = "mcps_invoice_photo_db_v1";
 const PHOTO_STORE = "photos";
-let state = { invoices: [], currentId: null };
+let state = { invoices: [], currentId: null, contacts: [], selectedContactId: null };
 let workingPhotos = [];
 
 function openPhotoDB(){
@@ -522,6 +610,8 @@ function defaultInvoice(){
     id:uid(), invoiceNo:nextInvoiceNumber(), status:"Draft", manager:"", property:"",
     address:"", clientPhone:"", clientEmail:"", workOrder:"", unit:"", building:"",
     invoiceDate:t,dueDate:plusDays(t,30),taxRate:0,
+    assignedTo:"",scheduledDate:t,jobStatus:"Scheduled",startTime:"",endTime:"",
+    accessNotes:"",jobInstructions:"",materials:"",completionNotes:"",
     companyPhone:"913-283-4002",companyEmail:"manager@MCPropertySolutionKC.com",
     companyWebsite:"www.mcpropertysolutionkc.com",
     lines:[{description:"",details:"",cost:0,qty:1}],
@@ -533,6 +623,8 @@ function loadState(){
     const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
     if(saved && Array.isArray(saved.invoices)){state=saved}
   }catch(e){}
+  if(!Array.isArray(state.contacts)) state.contacts=[];
+  if(!("selectedContactId" in state)) state.selectedContactId=null;
   if(!state.invoices.length){
     const inv=defaultInvoice();
     state.invoices=[inv]; state.currentId=inv.id; persist();
@@ -620,11 +712,16 @@ function fillForm(inv){
   ["manager","property","address","clientPhone","clientEmail","invoiceNo","status","workOrder","unit","building","invoiceDate","dueDate","taxRate","companyPhone","companyEmail","companyWebsite"].forEach(k=>{
     if($(k)) $(k).value=inv[k] ?? "";
   });
-  renderLineEditor(inv); renderPhotoEditor(inv); updateMoneySummary(); renderPreview();
+  ["assignedTo","scheduledDate","jobStatus","startTime","endTime","accessNotes","jobInstructions","materials","completionNotes"].forEach(k=>{
+    if($(k)) $(k).value=inv[k] ?? "";
+  });
+  renderContactSelect();
+  renderLineEditor(inv); renderPhotoEditor(inv); updateMoneySummary(); renderWorkOrderPreview(); renderPreview();
 }
 function saveFormIntoCurrent(){
   const inv=current(); if(!inv) return;
   ["manager","property","address","clientPhone","clientEmail","invoiceNo","status","workOrder","unit","building","invoiceDate","dueDate","companyPhone","companyEmail","companyWebsite"].forEach(k=>inv[k]=$(k).value);
+  ["assignedTo","scheduledDate","jobStatus","startTime","endTime","accessNotes","jobInstructions","materials","completionNotes"].forEach(k=>{if($(k)) inv[k]=$(k).value});
   inv.taxRate=Number($("taxRate").value||0);
   persist();
 }
@@ -634,6 +731,122 @@ function totalFor(inv){return subtotalFor(inv)+taxFor(inv)}
 function updateMoneySummary(){
   const inv=current(); if(!inv)return;
   $("moneySummary").textContent=`Subtotal ${money(subtotalFor(inv))} · Tax ${money(taxFor(inv))} · Total ${money(totalFor(inv))}`;
+}
+
+function currentContact(){return (state.contacts||[]).find(c=>c.id===state.selectedContactId)}
+function blankContact(){return {id:uid(),property:"",manager:"",address:"",phone:"",email:"",terms:"Net 30",workOrderPrefix:"",notes:""}}
+function contactLabel(c){return [c.property,c.manager].filter(Boolean).join(" — ") || "Untitled contact"}
+function renderContactSelect(){
+  const select=$("contactSelect"); if(!select)return;
+  const currentValue=select.value;
+  select.innerHTML=`<option value="">Select saved contact...</option>`+(state.contacts||[])
+    .slice().sort((a,b)=>contactLabel(a).localeCompare(contactLabel(b)))
+    .map(c=>`<option value="${c.id}">${esc(contactLabel(c))}</option>`).join("");
+  select.value=currentValue && state.contacts.some(c=>c.id===currentValue) ? currentValue : "";
+}
+function renderContacts(){
+  renderContactSelect();
+  const list=$("contactList"); if(!list)return;
+  const contacts=state.contacts||[];
+  list.innerHTML=contacts.length?contacts
+    .slice().sort((a,b)=>contactLabel(a).localeCompare(contactLabel(b)))
+    .map(c=>`<div class="contact-card ${c.id===state.selectedContactId?"active":""}" data-id="${c.id}">
+      <div class="name">${esc(c.property||"Untitled property")}</div>
+      <div class="meta">${esc(c.manager||"No manager")} · ${esc(c.email||c.phone||"No contact info")}</div>
+    </div>`).join(""):`<div class="empty">No contacts saved yet.</div>`;
+  document.querySelectorAll(".contact-card").forEach(card=>card.onclick=()=>{
+    state.selectedContactId=card.dataset.id;persist();fillContactForm(currentContact());renderContacts();
+  });
+  fillContactForm(currentContact() || blankContact());
+}
+function fillContactForm(c){
+  if(!$("contactProperty"))return;
+  $("contactProperty").value=c?.property||"";
+  $("contactManager").value=c?.manager||"";
+  $("contactAddress").value=c?.address||"";
+  $("contactPhone").value=c?.phone||"";
+  $("contactEmail").value=c?.email||"";
+  $("contactTerms").value=c?.terms||"Net 30";
+  $("contactWorkOrderPrefix").value=c?.workOrderPrefix||"";
+  $("contactNotes").value=c?.notes||"";
+}
+function readContactForm(id){
+  return {
+    id:id||uid(),
+    property:$("contactProperty").value.trim(),
+    manager:$("contactManager").value.trim(),
+    address:$("contactAddress").value.trim(),
+    phone:$("contactPhone").value.trim(),
+    email:$("contactEmail").value.trim(),
+    terms:$("contactTerms").value.trim(),
+    workOrderPrefix:$("contactWorkOrderPrefix").value.trim(),
+    notes:$("contactNotes").value.trim()
+  };
+}
+function applyContactToInvoice(contact){
+  const inv=current(); if(!inv||!contact)return;
+  inv.property=contact.property||"";
+  inv.manager=contact.manager||"";
+  inv.address=contact.address||"";
+  inv.clientPhone=contact.phone||"";
+  inv.clientEmail=contact.email||"";
+  if(contact.workOrderPrefix && !inv.workOrder) inv.workOrder=`${contact.workOrderPrefix}-${todayISO().replaceAll("-","").slice(2)}`;
+  persist();fillForm(inv);renderAll();
+}
+function saveContactFromCurrentInvoice(){
+  saveFormIntoCurrent();
+  const inv=current(); if(!inv)return;
+  const existing=(state.contacts||[]).find(c=>
+    (c.property||"").toLowerCase()===(inv.property||"").toLowerCase() && (c.manager||"").toLowerCase()===(inv.manager||"").toLowerCase()
+  );
+  const contact={
+    id:existing?.id||uid(),property:inv.property||"",manager:inv.manager||"",address:inv.address||"",
+    phone:inv.clientPhone||"",email:inv.clientEmail||"",terms:existing?.terms||"Net 30",
+    workOrderPrefix:existing?.workOrderPrefix||"",notes:existing?.notes||""
+  };
+  if(existing) Object.assign(existing,contact); else state.contacts.push(contact);
+  state.selectedContactId=contact.id;persist();renderContacts();renderContactSelect();$("contactSelect").value=contact.id;
+  alert("Contact saved.");
+}
+
+function renderWorkOrderPreview(){
+  const inv=current(); if(!inv||!$("workOrderPreview"))return;
+  const serviceLines=(inv.lines||[]).filter(l=>l.description||l.details).map(l=>`${l.description||"Service"}${l.details?`: ${l.details}`:""}`).join("\n");
+  $("workOrderPreview").innerHTML=`
+    <section class="workorder-page">
+      <div class="wo-head">
+        <div>
+          <div class="wo-brand">MC PROPERTY SOLUTIONS</div>
+          <div>${esc(inv.companyPhone||"")} · ${esc(inv.companyEmail||"")}</div>
+        </div>
+        <div class="wo-title">WORK ORDER</div>
+      </div>
+      <div class="wo-grid">
+        <div class="wo-box"><b>Property</b>${esc(inv.property||"")}</div>
+        <div class="wo-box"><b>Manager</b>${esc(inv.manager||"")}</div>
+        <div class="wo-box"><b>Address</b>${esc(inv.address||"")}</div>
+        <div class="wo-box"><b>Work Order / Invoice</b>${esc(inv.workOrder||"")}<br>${esc(inv.invoiceNo||"")}</div>
+        <div class="wo-box"><b>Unit / Building</b>${esc(inv.unit||"")} ${inv.building?`· Building ${esc(inv.building)}`:""}</div>
+        <div class="wo-box"><b>Schedule</b>${esc(dateText(inv.scheduledDate)||"")} · ${esc(inv.startTime||"")} ${inv.endTime?`- ${esc(inv.endTime)}`:""}</div>
+        <div class="wo-box"><b>Assigned To</b>${esc(inv.assignedTo||"")}</div>
+        <div class="wo-box"><b>Status</b>${esc(inv.jobStatus||"Scheduled")}</div>
+      </div>
+      <div class="wo-section"><h3>Job Instructions</h3><div class="wo-lines">${esc(inv.jobInstructions||serviceLines||"")}</div></div>
+      <div class="wo-section"><h3>Checklist</h3><div class="checklist">
+        <div class="checkitem">Walk unit / area before starting</div>
+        <div class="checkitem">Confirm scope and access</div>
+        <div class="checkitem">Take before photos</div>
+        <div class="checkitem">Complete assigned work</div>
+        <div class="checkitem">Clean work area</div>
+        <div class="checkitem">Take after photos</div>
+      </div></div>
+      <div class="wo-section"><h3>Materials / Supplies</h3><div class="wo-lines">${esc(inv.materials||"")}</div></div>
+      <div class="wo-section"><h3>Access / Completion Notes</h3><div class="wo-lines">${esc([inv.accessNotes,inv.completionNotes].filter(Boolean).join("\\n\\n"))}</div></div>
+      <div class="wo-sign">
+        <div class="wo-line">Technician / Contractor</div>
+        <div class="wo-line">Manager Approval</div>
+      </div>
+    </section>`;
 }
 
 function renderPreview(){
@@ -748,7 +961,7 @@ function renderPreview(){
     ${photoPages}
   `;
 }
-function renderAll(){renderList();renderPreview()}
+function renderAll(){renderList();renderContacts();renderWorkOrderPreview();renderPreview()}
 
 $("newInvoiceBtn").onclick=()=>{
   saveFormIntoCurrent();
@@ -803,6 +1016,33 @@ $("addLineBtn").onclick=()=>{
 ["manager","property","address","clientPhone","clientEmail","invoiceNo","status","workOrder","unit","building","invoiceDate","dueDate","taxRate","companyPhone","companyEmail","companyWebsite"].forEach(k=>{
   $(k).addEventListener("input",()=>{saveFormIntoCurrent();updateMoneySummary();renderPreview();renderList()});
 });
+["assignedTo","scheduledDate","jobStatus","startTime","endTime","accessNotes","jobInstructions","materials","completionNotes"].forEach(k=>{
+  $(k).addEventListener("input",()=>{saveFormIntoCurrent();renderWorkOrderPreview();renderList()});
+});
+$("contactSelect").onchange=()=>{const c=state.contacts.find(x=>x.id===$("contactSelect").value); if(c) applyContactToInvoice(c)};
+$("applyContactBtn").onclick=()=>{const c=state.contacts.find(x=>x.id===$("contactSelect").value); if(c) applyContactToInvoice(c)};
+$("saveContactFromInvoiceBtn").onclick=saveContactFromCurrentInvoice;
+$("newContactBtn").onclick=()=>{state.selectedContactId=null;fillContactForm(blankContact());renderContacts()};
+$("saveContactBtn").onclick=()=>{
+  const existing=currentContact();
+  const contact=readContactForm(existing?.id);
+  if(!contact.property && !contact.manager){alert("Add at least a property or manager name.");return}
+  if(existing) Object.assign(existing,contact); else state.contacts.push(contact);
+  state.selectedContactId=contact.id;persist();renderContacts();renderContactSelect();alert("Contact saved.");
+};
+$("useContactBtn").onclick=()=>applyContactToInvoice(readContactForm(currentContact()?.id));
+$("deleteContactBtn").onclick=()=>{
+  const c=currentContact(); if(!c)return;
+  if(!confirm(`Delete contact ${contactLabel(c)}?`))return;
+  state.contacts=state.contacts.filter(x=>x.id!==c.id);state.selectedContactId=null;persist();renderContacts();renderContactSelect();
+};
+$("printWorkOrderBtn").onclick=async()=>{
+  saveFormIntoCurrent();renderWorkOrderPreview();showWorkOrder();
+  document.body.classList.add("print-workorder");
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  window.print();
+  setTimeout(()=>document.body.classList.remove("print-workorder"),800);
+};
 
 async function fileToDataURL(file){
   return await new Promise((resolve,reject)=>{
@@ -873,16 +1113,31 @@ $("photoInput").onchange=async e=>{
   }
 };
 
+function setActiveTab(tabId){
+  ["editTab","contactsTab","workOrderTab","previewTab"].forEach(id=>$(id).classList.toggle("active",id===tabId));
+}
+function hidePanels(){
+  $("editor").classList.add("hidden");
+  $("contactsPanel").classList.add("hidden");
+  $("workOrderPanel").classList.add("hidden");
+  $("previewWrap").classList.remove("active");
+}
 function showEdit(){
-  $("editor").classList.remove("hidden");$("previewWrap").classList.remove("active");
-  $("editTab").classList.add("active");$("previewTab").classList.remove("active");
+  hidePanels();$("editor").classList.remove("hidden");setActiveTab("editTab");
 }
 function showPreview(){
   saveFormIntoCurrent();renderPreview();
-  $("editor").classList.add("hidden");$("previewWrap").classList.add("active");
-  $("editTab").classList.remove("active");$("previewTab").classList.add("active");
+  hidePanels();$("previewWrap").classList.add("active");setActiveTab("previewTab");
 }
-$("editTab").onclick=showEdit;$("previewTab").onclick=showPreview;
+function showContacts(){
+  saveFormIntoCurrent();renderContacts();
+  hidePanels();$("contactsPanel").classList.remove("hidden");setActiveTab("contactsTab");
+}
+function showWorkOrder(){
+  saveFormIntoCurrent();renderWorkOrderPreview();
+  hidePanels();$("workOrderPanel").classList.remove("hidden");setActiveTab("workOrderTab");
+}
+$("editTab").onclick=showEdit;$("contactsTab").onclick=showContacts;$("workOrderTab").onclick=showWorkOrder;$("previewTab").onclick=showPreview;
 
 (async()=>{
   loadState();

@@ -1,0 +1,179 @@
+ze:15px}
+  .sig-name{font-size:11px;margin-top:4px}
+  .attachment-note{width:8.5in;margin:0 auto 8px;font-weight:800;color:#7a5200}
+  .totals{font-family:Georgia,"Times New Roman",serif}
+  .totals .row{display:grid;grid-template-columns:1fr auto;gap:12px;padding:5px 8px;font-size:16px}
+  .totals .total{background:linear-gradient(90deg,#e7aa2d,#f0c45f);font-weight:800;font-size:19px;margin-top:4px}
+  .invoice-footer{
+    margin-top:auto;border-top:1.5px solid var(--gold);padding-top:8px;text-align:center;
+    font-family:Georgia,"Times New Roman",serif
+  }
+  .invoice-footer .tagline{letter-spacing:.25em;font-size:11px}
+  .invoice-footer .thanks{font-style:italic;font-size:13px;margin-top:5px}
+  .status-badge{display:inline-block;border:1px solid var(--gold);color:#7e5400;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:800;margin-top:8px}
+
+  .photo-page{
+    width:8.5in;min-height:11in;background:#fff;margin:0 auto 18px;padding:.38in;
+    box-shadow:0 3px 14px rgba(0,0,0,.18);page-break-before:auto
+  }
+  .photo-page h1{font-family:Georgia,"Times New Roman",serif;font-size:26px;margin:0}
+  .photo-page .photo-meta{font-size:12px;margin-top:6px;color:#444}
+  .photo-page .gold-line{height:2px;background:var(--gold);margin:10px 0 14px}
+  .print-photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .print-photo{break-inside:avoid}
+  .print-photo img{width:100%;height:2.8in;object-fit:cover;border:1px solid #ddd}
+  .print-photo .cap{font-size:11px;margin-top:4px}
+
+  .empty{color:#888}
+  .money-summary{font-size:12px;color:#555;margin-top:6px}
+
+  @media(max-width:980px){
+    .app{grid-template-columns:1fr}
+    .sidebar{position:relative;height:auto}
+    .grid2,.grid3{grid-template-columns:1fr}
+    .workspace{padding:10px}
+    .invoice-page,.photo-page{transform-origin:top left}
+  }
+
+  @media print{
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+    html,body{background:#fff!important;margin:0!important;padding:0!important}
+    .sidebar,.toolbar,.editor,.attachment-note{display:none!important}
+    .main,.workspace,.preview-wrap,#invoicePreview{
+      display:block!important;
+      padding:0!important;
+      margin:0!important;
+      max-width:none!important;
+      overflow:visible!important;
+    }
+
+    /* Page 1: invoice */
+    .invoice-page{
+      display:block!important;
+      visibility:visible!important;
+      box-shadow:none!important;
+      margin:0!important;
+      width:8.5in!important;
+      height:10.98in!important;
+      min-height:10.98in!important;
+      overflow:hidden!important;
+      page-break-after:always!important;
+      break-after:page!important;
+    }
+
+    /* Photo pages follow immediately. No extra blank page. */
+    .photo-page{
+      display:block!important;
+      visibility:visible!important;
+      box-shadow:none!important;
+      margin:0!important;
+      width:8.5in!important;
+      height:10.98in!important;
+      min-height:10.98in!important;
+      overflow:hidden!important;
+      page-break-before:auto!important;
+      break-before:auto!important;
+      page-break-after:auto!important;
+      break-after:auto!important;
+      page-break-inside:avoid!important;
+      break-inside:avoid-page!important;
+    }
+
+    /* Only add a page break between photo pages when there is more than one. */
+    .photo-page + .photo-page{
+      page-break-before:auto!important;
+      break-before:page!important;
+    }
+
+    .photo-page img,.invoice-page img{
+      display:block!important;
+      visibility:visible!important;
+    }
+
+    @page{size:Letter;margin:0}
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand-small">MC PROPERTY SOLUTIONS</div>
+    <div class="sub">Invoice System — MCPS v10 TEST COPY</div>
+    <div class="side-actions">
+      <button class="btn gold" id="newInvoiceBtn">+ New</button>
+      <button class="btn dark" id="backupBtn">Backup</button>
+    </div>
+    <input class="search" id="searchInvoices" placeholder="Search invoices...">
+    <div id="invoiceList" class="invoice-list"></div>
+  </aside>
+
+  <main class="main">
+    <div class="toolbar">
+      <div class="tabs">
+        <button class="tab active" id="editTab">Edit</button>
+        <button class="tab" id="previewTab">Preview</button>
+      </div>
+      <div class="spacer"></div>
+      <button id="saveBtn" class="primary">Save Invoice</button>
+      <button id="printBtn">Print / Save PDF</button>
+      <button id="duplicateBtn">Duplicate</button>
+      <button id="deleteBtn">Delete</button>
+    </div>
+
+    <div class="workspace">
+      <section class="editor" id="editor">
+        <div class="grid2">
+          <div>
+            <div class="section-title">Bill To</div>
+            <div class="field"><label>Manager</label><input id="manager"></div>
+            <div class="field"><label>Property</label><input id="property"></div>
+            <div class="field"><label>Address</label><textarea id="address"></textarea></div>
+            <div class="grid2">
+              <div class="field"><label>Phone</label><input id="clientPhone"></div>
+              <div class="field"><label>Email</label><input id="clientEmail"></div>
+            </div>
+          </div>
+          <div>
+            <div class="section-title">Invoice Details</div>
+            <div class="grid2">
+              <div class="field"><label>Invoice #</label><input id="invoiceNo"></div>
+              <div class="field"><label>Status</label>
+                <select id="status"><option>Draft</option><option>Sent</option><option>Paid</option></select>
+              </div>
+              <div class="field"><label>Work Order #</label><input id="workOrder"></div>
+              <div class="field"><label>Unit / Area</label><input id="unit"></div>
+              <div class="field"><label>Building #</label><input id="building"></div>
+              <div class="field"><label>Invoice Date</label><input type="date" id="invoiceDate"></div>
+              <div class="field"><label>Due Date</label><input type="date" id="dueDate"></div>
+              <div class="field"><label>Tax %</label><input type="number" step="0.01" min="0" id="taxRate" value="0"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:16px"></div>
+        <div class="section-title">Services</div>
+        <table class="line-editor">
+          <thead><tr><th>Description</th><th>Details</th><th>Quantity</th><th>Cost</th><th></th></tr></thead>
+          <tbody id="lineEditorBody"></tbody>
+        </table>
+        <button class="btn light" id="addLineBtn" style="margin-top:10px">+ Add service line</button>
+        <div class="money-summary" id="moneySummary"></div>
+
+        <div style="height:18px"></div>
+        <div class="section-title">Completed Work Photos</div>
+        <div class="photo-drop">
+          <input type="file" id="photoInput" accept="image/*,.heic,.heif" multiple>
+          <div id="photoCount" style="margin-top:8px;font-weight:800">Photos attached: 0</div>
+          <div class="help"><strong>Photos are included in Preview and Print / Save PDF.</strong> JPG, PNG, HEIC and HEIF are supported. HEIC/HEIF photos are converted to JPG automatically before they are attached.</div>
+        </div>
+        <div id="photoEditorGrid" class="photo-grid"></div>
+
+        <div style="height:18px"></div>
+        <div class="section-title">Company Settings</div>
+        <div class="grid3">
+          <div class="field"><label>Company Phone</label><input id="companyPhone" value="913-283-4002"></div>
+          <div class="field"><label>Company Email</label><input id="companyEmail" value="manager@MCPropertySolutionKC.com"></div>
+          <div class="field"><label>Website</label><input id="companyWebsite" value="www.mcpropertysolutionkc.com"></div>
+        </div>
+        <div class="help">These settings appear on the printed invoice. The master layout itself do

@@ -1,0 +1,116 @@
+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";
+const STORAGE_KEY = "mcps_invoice_system_v1";
+const COUNTER_KEY = "mcps_invoice_counter_v1";
+const PHOTO_DB = "mcps_invoice_photo_db_v1";
+const PHOTO_STORE = "photos";
+let state = { invoices: [], currentId: null };
+let workingPhotos = [];
+
+function openPhotoDB(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(PHOTO_DB,1);
+    req.onupgradeneeded=()=>{ if(!req.result.objectStoreNames.contains(PHOTO_STORE)) req.result.createObjectStore(PHOTO_STORE,{keyPath:"key"}); };
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+}
+async function putPhoto(invoiceId, photo){
+  const db=await openPhotoDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(PHOTO_STORE,"readwrite");
+    tx.objectStore(PHOTO_STORE).put({key:`${invoiceId}:${photo.id}`,invoiceId,id:photo.id,data:photo.data,caption:photo.caption||""});
+    tx.oncomplete=()=>{db.close();resolve()};
+    tx.onerror=()=>{db.close();reject(tx.error)};
+  });
+}
+async function deletePhotoDB(invoiceId, photoId){
+  const db=await openPhotoDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(PHOTO_STORE,"readwrite");
+    tx.objectStore(PHOTO_STORE).delete(`${invoiceId}:${photoId}`);
+    tx.oncomplete=()=>{db.close();resolve()};
+    tx.onerror=()=>{db.close();reject(tx.error)};
+  });
+}
+async function loadPhotosDB(invoiceId){
+  const db=await openPhotoDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(PHOTO_STORE,"readonly");
+    const req=tx.objectStore(PHOTO_STORE).getAll();
+    req.onsuccess=()=>{db.close();resolve(req.result.filter(x=>x.invoiceId===invoiceId).map(x=>({id:x.id,data:x.data,caption:x.caption||""})))};
+    req.onerror=()=>{db.close();reject(req.error)};
+  });
+}
+async function deleteInvoicePhotosDB(invoiceId){
+  const all=await loadPhotosDB(invoiceId);
+  for(const p of all) await deletePhotoDB(invoiceId,p.id);
+}
+
+const $ = id => document.getElementById(id);
+const money = n => new Intl.NumberFormat("en-US",{style:"currency",currency:"USD"}).format(Number(n||0));
+const dateText = s => {
+  if(!s) return "";
+  const d = new Date(s+"T12:00:00");
+  return d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+};
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+
+function todayISO(){
+  const d=new Date();
+  const z=n=>String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`;
+}
+function plusDays(iso,days){
+  const d=new Date(iso+"T12:00:00"); d.setDate(d.getDate()+days);
+  return d.toISOString().slice(0,10);
+}
+function nextInvoiceNumber(){
+  let c = Number(localStorage.getItem(COUNTER_KEY)||0)+1;
+  localStorage.setItem(COUNTER_KEY,String(c));
+  return `MCPS-${new Date().getFullYear()}-${String(c).padStart(4,"0")}`;
+}
+function uid(){return (crypto.randomUUID ? crypto.randomUUID() : Date.now()+"-"+Math.random().toString(16).slice(2));}
+
+function defaultInvoice(){
+  const t=todayISO();
+  return {
+    id:uid(), invoiceNo:nextInvoiceNumber(), status:"Draft", manager:"", property:"",
+    address:"", clientPhone:"", clientEmail:"", workOrder:"", unit:"", building:"",
+    invoiceDate:t,dueDate:plusDays(t,30),taxRate:0,
+    companyPhone:"913-283-4002",companyEmail:"manager@MCPropertySolutionKC.com",
+    companyWebsite:"www.mcpropertysolutionkc.com",
+    lines:[{description:"",details:"",cost:0,qty:1}],
+    photos:[]
+  };
+}
+function loadState(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
+    if(saved && Array.isArray(saved.invoices)){state=saved}
+  }catch(e){}
+  if(!state.invoices.length){
+    const inv=defaultInvoice();
+    state.invoices=[inv]; state.currentId=inv.id; persist();
+  } else if(!state.currentId || !state.invoices.some(i=>i.id===state.currentId)){
+    state.currentId=state.invoices[0].id;
+  }
+}
+function persist(){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+  }catch(e){
+    console.warn("Local storage is full; invoice remains available in this session.",e);
+  }
+}
+
+function current(){return state.invoices.find(i=>i.id===state.currentId)}
+
+function renderList(){
+  const q=$("searchInvoices").value.toLowerCase().trim();
+  const list=state.invoices
+    .slice().sort((a,b)=>(b.invoiceDate||"").localeCompare(a.invoiceDate||""))
+    .filter(i=>[i.invoiceNo,i.property,i.manager,i.workOrder,i.status].join(" ").toLowerCase().includes(q));
+  $("invoiceList").innerHTML=list.map(i=>`
+    <div class="inv-card ${i.id===state.currentId?"active":""}" data-id="${i.id}">
+      <div class="num">${esc(i.invoiceNo||"Untitled")}</div>
+      

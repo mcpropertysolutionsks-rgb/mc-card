@@ -1,0 +1,4 @@
+<style>
+.line-editor .remove,.remove-photo{background:var(--navy)!important;color:var(--button-gold)!important;border:1px solid var(--button-gold)!important}
+.line-editor .remove:hover,.remove-photo:hover{background:var(--navy2)!important;color:var(--button-gold)!important}
+</style>

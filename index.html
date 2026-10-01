@@ -300,11 +300,15 @@
   .template-tax{top:81.55%}
   .template-grand{top:85.05%;font-size:15px;color:#111}
 
-  .template-signature{
-    position:absolute;left:13.0%;top:80.15%;width:39%;
-    font-family:"Allura","Segoe Script","Brush Script MT",cursive;
-    font-size:36px;line-height:1;color:#111;transform:rotate(-2deg);
-    white-space:nowrap;
+  .template-signature-block{
+    position:absolute;left:9.5%;top:76.95%;width:32%;
+    display:flex;flex-direction:column;align-items:flex-start;
+  }
+  .template-signature-ink{display:block;width:1.58in;height:.84in;object-fit:contain;object-position:left bottom;margin-left:6px}
+  .template-signature-line{width:2.45in;border-top:2px solid #c98a18;margin-top:1px}
+  .template-signature-name{
+    font-family:Georgia,"Times New Roman",serif;font-size:12.5px;font-weight:700;
+    color:#111;margin-top:4px;letter-spacing:.01em;white-space:nowrap;text-transform:none;
   }
 
   .continuation-content{position:absolute;left:5.3%;right:5.3%;top:18.0%;bottom:10.5%;z-index:1}
@@ -319,11 +323,10 @@
   .cont-table .num{text-align:right;white-space:nowrap}
   .cont-table .qty{text-align:center}
   .cont-table .desc small{display:block;color:#333;margin-top:2px}
-  .cont-signature{
-    position:absolute;left:8%;bottom:8.5%;
-    font-family:"Allura","Segoe Script","Brush Script MT",cursive;
-    font-size:31px;color:#111;transform:rotate(-2deg)
-  }
+  .cont-signature-block{position:absolute;left:7%;bottom:7.2%;display:flex;flex-direction:column;align-items:flex-start}
+  .cont-signature-ink{display:block;width:1.32in;height:.70in;object-fit:contain;object-position:left bottom;margin-left:5px}
+  .cont-signature-line{width:2.05in;border-top:1.8px solid #c98a18;margin-top:1px}
+  .cont-signature-name{font-family:Georgia,"Times New Roman",serif;font-size:11.5px;font-weight:700;color:#111;margin-top:3px;white-space:nowrap}
 
   .photo-content{position:absolute;left:5.2%;right:5.2%;top:18%;bottom:11%;z-index:1}
   .photo-heading{font-family:Georgia,"Times New Roman",serif;font-size:22px;font-weight:700;margin-bottom:4px}
@@ -682,7 +685,11 @@ function renderPreview(){
             <thead><tr><th>Description</th><th>Units</th><th>Cost</th><th>Quantity</th><th>Amount</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
-          <div class="cont-signature">Miguel A. Castro</div>
+          <div class="cont-signature-block">
+            <img class="cont-signature-ink" src="assets/miguel-signature.png" alt="Miguel Castro signature">
+            <div class="cont-signature-line"></div>
+            <div class="cont-signature-name">Miguel A. Castro, Owner</div>
+          </div>
         </div>
       </section>`;
   }
@@ -730,7 +737,11 @@ function renderPreview(){
         <div class="template-total template-tax">${inv.taxRate?money(taxFor(inv)):"—"}</div>
         <div class="template-total template-grand">${money(totalFor(inv))}</div>
 
-        <div class="template-signature">Miguel A. Castro</div>
+        <div class="template-signature-block">
+          <img class="template-signature-ink" src="assets/miguel-signature.png" alt="Miguel Castro signature">
+          <div class="template-signature-line"></div>
+          <div class="template-signature-name">Miguel A. Castro, Owner</div>
+        </div>
       </div>
     </section>
     ${continuationPages}

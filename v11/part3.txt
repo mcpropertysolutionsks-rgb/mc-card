@@ -47,9 +47,8 @@ function plusDays(iso,days){
   return d.toISOString().slice(0,10);
 }
 function nextInvoiceNumber(){
-  let c = Number(localStorage.getItem(COUNTER_KEY)||0)+1;
-  localStorage.setItem(COUNTER_KEY,String(c));
-  return `MCPS-${new Date().getFullYear()}-${String(c).padStart(4,"0")}`;
+  // Drafts never allocate invoice numbers locally; registry is owned by the CRM.
+  return '';
 }
 function uid(){return (crypto.randomUUID ? crypto.randomUUID() : Date.now()+"-"+Math.random().toString(16).slice(2));}
 
@@ -94,7 +93,7 @@ function renderList(){
     .filter(i=>[i.invoiceNo,i.property,i.manager,i.workOrder,i.status].join(" ").toLowerCase().includes(q));
   $("invoiceList").innerHTML=list.map(i=>`
     <div class="inv-card ${i.id===state.currentId?"active":""}" data-id="${i.id}">
-      <div class="num">${esc(i.invoiceNo||"Untitled")}</div>
+      <div class="num">${esc(i.invoiceNo||"Draft — no official number")}</div>
       <div class="meta">${esc(i.property||"No property")} · ${esc(i.invoiceDate||"")}</div>
       <div class="meta">${money(totalFor(i))}</div>
       <span class="status">${esc(i.status||"Draft")}</span>

@@ -114,7 +114,13 @@ async function waitForPrintableImages(){
 }
 $("printBtn").onclick=async()=>{
   try{
-    saveFormIntoCurrent();renderPreview();showPreview();
+    saveFormIntoCurrent();
+    const activeInvoice = current();
+    if (!activeInvoice || !String(activeInvoice.invoiceNo || '').trim()) {
+      alert("This is an unnumbered draft. Create the official invoice number in the MCPS CRM before issuing or printing a customer invoice.");
+      return;
+    }
+    renderPreview();showPreview();
     await waitForPrintableImages();
     window.print();
   }catch(e){
@@ -124,7 +130,7 @@ $("printBtn").onclick=async()=>{
 };
 $("duplicateBtn").onclick=()=>{
   saveFormIntoCurrent();
-  const src=current(); const copy=JSON.parse(JSON.stringify(src));copy.id=uid();copy.invoiceNo=nextInvoiceNumber();copy.status="Draft";
+  const src=current(); const copy=JSON.parse(JSON.stringify(src));copy.id=uid();copy.invoiceNo="";copy.status="Draft";
   state.invoices.push(copy);state.currentId=copy.id;persist();fillForm(copy);renderAll();
 };
 $("deleteBtn").onclick=async()=>{

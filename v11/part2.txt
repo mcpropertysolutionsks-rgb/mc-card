@@ -122,7 +122,7 @@
           <div>
             <div class="section-title">Invoice Details</div>
             <div class="grid2">
-              <div class="field"><label>Invoice #</label><input id="invoiceNo"></div>
+              <div class="field"><label>Invoice #</label><input id="invoiceNo" readonly title="Official invoice numbers are assigned in the MCPS CRM"></div>
               <div class="field"><label>Status</label>
                 <select id="status"><option>Draft</option><option>Sent</option><option>Paid</option></select>
               </div>
@@ -174,7 +174,7 @@
 <script>
 const LOGO_DATA = "assets/app-icon.png";
 const STORAGE_KEY = "mcps_invoice_system_v1";
-const COUNTER_KEY = "mcps_invoice_counter_v1";
+// Legacy local numbering counter deliberately disabled. Only the CRM may issue new official numbers.
 const PHOTO_DB = "mcps_invoice_photo_db_v1";
 const PHOTO_STORE = "photos";
 let state = { invoices: [], currentId: null };

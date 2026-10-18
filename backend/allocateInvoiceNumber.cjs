@@ -57,6 +57,11 @@ async function allocateInvoiceNumber(db, { invoiceId, prefix }) {
           prior.invoiceNo !== prefix + '-' + String(prior.number).padStart(4, '0')) {
         throw new Error('Corrupt invoice assignment; manual reconciliation required');
       }
+      // Reuse is safe only when the immutable issued-number registry agrees.
+      const issuedSnap = await tx.get(db.collection('issuedInvoiceNumbers').doc(prior.invoiceNo));
+      if (!issuedSnap.exists || issuedSnap.get('invoiceId') !== invoiceId) {
+        throw new Error('Invoice assignment registry mismatch; manual reconciliation required');
+      }
       return { invoiceNo: prior.invoiceNo, number: prior.number, existing: true };
     }
 

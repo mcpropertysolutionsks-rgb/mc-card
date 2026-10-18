@@ -70,3 +70,11 @@ test('rejects missing sequence and invalid sequence value', async () => {
   const b = fakeFirestore({ 'invoiceSequences/AC': { next: -1, reconciled: true } });
   await assert.rejects(allocateInvoiceNumber(b.db, { invoiceId: 'inv1', prefix: 'AC' }), /Invalid/);
 });
+
+test('refuses inconsistent existing assignments rather than reusing a corrupt number', async () => {
+  const { db } = fakeFirestore({
+    'invoiceAssignments/inv1': { prefix: 'AC', number: 6, invoiceNo: 'AC-0099' },
+    'invoiceSequences/AC': { next: 7, reconciled: true }
+  });
+  await assert.rejects(allocateInvoiceNumber(db, { invoiceId: 'inv1', prefix: 'AC' }), /Corrupt invoice assignment/);
+});

@@ -78,3 +78,19 @@ test('refuses inconsistent existing assignments rather than reusing a corrupt nu
   });
   await assert.rejects(allocateInvoiceNumber(db, { invoiceId: 'inv1', prefix: 'AC' }), /Corrupt invoice assignment/);
 });
+
+
+test('rejects existing assignment without a matching immutable issued-number record', async () => {
+  const orphan = fakeFirestore({
+    'invoiceAssignments/inv1': { prefix: 'AC', number: 6, invoiceNo: 'AC-0006' },
+    'invoiceSequences/AC': { next: 7, reconciled: true }
+  });
+  await assert.rejects(allocateInvoiceNumber(orphan.db, { invoiceId: 'inv1', prefix: 'AC' }), /registry mismatch/);
+
+  const conflicted = fakeFirestore({
+    'invoiceAssignments/inv1': { prefix: 'AC', number: 6, invoiceNo: 'AC-0006' },
+    'invoiceSequences/AC': { next: 7, reconciled: true },
+    'issuedInvoiceNumbers/AC-0006': { invoiceId: 'someone-else' }
+  });
+  await assert.rejects(allocateInvoiceNumber(conflicted.db, { invoiceId: 'inv1', prefix: 'AC' }), /registry mismatch/);
+});

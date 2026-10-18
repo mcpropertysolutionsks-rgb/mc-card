@@ -53,6 +53,10 @@ async function allocateInvoiceNumber(db, { invoiceId, prefix }) {
       if (prior.prefix !== prefix) {
         throw new Error('Invoice already assigned to another customer prefix');
       }
+      if (!Number.isSafeInteger(prior.number) || prior.number < 1 ||
+          prior.invoiceNo !== prefix + '-' + String(prior.number).padStart(4, '0')) {
+        throw new Error('Corrupt invoice assignment; manual reconciliation required');
+      }
       return { invoiceNo: prior.invoiceNo, number: prior.number, existing: true };
     }
 

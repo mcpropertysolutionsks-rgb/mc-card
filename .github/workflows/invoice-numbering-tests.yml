@@ -1,0 +1,25 @@
+name: Invoice numbering safety tests
+
+on:
+  push:
+    branches:
+      - repair/mcps-invoice-safeguards-20261018
+    paths:
+      - 'backend/**'
+      - '.github/workflows/invoice-numbering-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  invoice-numbering:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run invoice allocation safety tests
+        run: node --test backend/allocateInvoiceNumber.test.cjs

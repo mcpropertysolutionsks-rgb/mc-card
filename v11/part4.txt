@@ -100,7 +100,7 @@ $("newInvoiceBtn").onclick=()=>{
   saveFormIntoCurrent();
   const inv=defaultInvoice();state.invoices.push(inv);state.currentId=inv.id;persist();fillForm(inv);renderAll();
 };
-$("saveBtn").onclick=()=>{saveFormIntoCurrent();renderAll();alert("Invoice saved on this device.");};
+$("saveBtn").onclick=()=>{const saved=saveFormIntoCurrent();renderAll();if(saved)alert("Draft saved on this device. This is not an issued invoice and is not synchronized to a central accounting register.");};
 async function waitForPrintableImages(){
   const imgs=Array.from(document.querySelectorAll("#invoicePreview img"));
   await Promise.all(imgs.map(img=>new Promise(resolve=>{

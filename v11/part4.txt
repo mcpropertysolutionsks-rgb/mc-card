@@ -120,6 +120,11 @@ $("printBtn").onclick=async()=>{
       alert("This is an unnumbered draft. Create the official invoice number in the MCPS CRM before issuing or printing a customer invoice.");
       return;
     }
+    const duplicateNumber = state.invoices.some(other => other.id !== activeInvoice.id && String(other.invoiceNo || "").trim().toUpperCase() === String(activeInvoice.invoiceNo || "").trim().toUpperCase());
+    if (duplicateNumber) {
+      alert("Duplicate invoice number detected. Printing is blocked until the accounting records are reconciled.");
+      return;
+    }
     renderPreview();showPreview();
     await waitForPrintableImages();
     window.print();
@@ -134,7 +139,12 @@ $("duplicateBtn").onclick=()=>{
   state.invoices.push(copy);state.currentId=copy.id;persist();fillForm(copy);renderAll();
 };
 $("deleteBtn").onclick=async()=>{
-  if(!confirm("Delete this invoice?"))return;
+  const selected=current();
+  if (selected && String(selected.invoiceNo || "").trim()) {
+    alert("A numbered invoice cannot be deleted. Keep it in the accounting history and mark it Cancelled through the authorized accounting workflow.");
+    return;
+  }
+  if(!confirm("Delete this unnumbered draft?"))return;
   const oldId=state.currentId;
   state.invoices=state.invoices.filter(i=>i.id!==state.currentId);
   try{await deleteInvoicePhotosDB(oldId)}catch(e){console.warn(e)}

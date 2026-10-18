@@ -58,8 +58,8 @@ function defaultInvoice(){
     id:uid(), invoiceNo:nextInvoiceNumber(), status:"Draft", manager:"", property:"",
     address:"", clientPhone:"", clientEmail:"", workOrder:"", unit:"", building:"",
     invoiceDate:t,dueDate:plusDays(t,30),taxRate:0,
-    companyPhone:"913-283-4002",companyEmail:"manager@MCPropertySolutionKC.com",
-    companyWebsite:"www.mcpropertysolutionkc.com",
+    companyPhone:"913-283-4002",companyEmail:"billing@mcpropertysolutionskc.com",
+    companyWebsite:"mcpropertysolutionskc.com",
     lines:[{description:"",details:"",cost:0,qty:1}],
     photos:[]
   };
@@ -80,7 +80,8 @@ function persist(){
   try{
     localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
   }catch(e){
-    console.warn("Local storage is full; invoice remains available in this session.",e);
+    console.error("Invoice data was not saved to this device.",e);
+    alert("SAVE FAILED: Browser storage is unavailable or full. Export a backup before closing this page.");
   }
 }
 

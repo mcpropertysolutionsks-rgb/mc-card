@@ -79,9 +79,11 @@ function loadState(){
 function persist(){
   try{
     localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+    return true;
   }catch(e){
     console.error("Invoice data was not saved to this device.",e);
     alert("SAVE FAILED: Browser storage is unavailable or full. Export a backup before closing this page.");
+    return false;
   }
 }
 
@@ -160,10 +162,15 @@ function fillForm(inv){
   renderLineEditor(inv); renderPhotoEditor(inv); updateMoneySummary(); renderPreview();
 }
 function saveFormIntoCurrent(){
-  const inv=current(); if(!inv) return;
+  const inv=current(); if(!inv) return false;
   ["manager","property","address","clientPhone","clientEmail","invoiceNo","status","workOrder","unit","building","invoiceDate","dueDate","companyPhone","companyEmail","companyWebsite"].forEach(k=>inv[k]=$(k).value);
+  if (!String(inv.invoiceNo||"").trim() && inv.status !== "Draft") {
+    inv.status="Draft";
+    $("status").value="Draft";
+    alert("An unnumbered invoice must remain a Draft. No official invoice has been issued.");
+  }
   inv.taxRate=Number($("taxRate").value||0);
-  persist();
+  return persist();
 }
 function subtotalFor(inv){return (inv.lines||[]).reduce((s,l)=>s+Number(l.cost||0)*Number(l.qty||0),0)}
 function taxFor(inv){return subtotalFor(inv)*Number(inv.taxRate||0)/100}
